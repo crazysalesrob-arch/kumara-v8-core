@@ -1,0 +1,50 @@
+{
+  "$schema": "Meme Sweeper — V8.0 Image Deck Rotation",
+  "description": "Card image rotation from Figma Make ai_chat.json design brief (messages 133, 140, 151). 3 normal conspiracy memes → glitch_1 (CCTV trap) → glitch_2 (crash trigger).",
+  "deck": [
+    {
+      "id": "card-01",
+      "type": "normal",
+      "topic": "Loch Ness Monster",
+      "caption": "SCOTTISH SURVEILLANCE SATELLITE CONFIRMS: NESSIE IS REAL",
+      "image": "images/meme1.png",
+      "behavior": "swipe_always_correct"
+    },
+    {
+      "id": "card-02",
+      "type": "normal",
+      "topic": "Reptilian Treaty of 1954",
+      "caption": "CLASSIFIED: EISENHOWER'S SECRET PACT WITH THE LIZARD PEOPLE",
+      "image": "images/meme2.png",
+      "behavior": "swipe_always_correct"
+    },
+    {
+      "id": "card-03",
+      "type": "normal",
+      "topic": "Alien Autopsy",
+      "caption": "ROSWELL FILE #7: THE AUTOPSY THEY SAID NEVER HAPPENED",
+      "image": "images/meme3.png",
+      "behavior": "swipe_always_correct"
+    },
+    {
+      "id": "card-04",
+      "type": "glitch_2",
+      "topic": "System Breach",
+      "caption": "IS THIS ALL JUST A SIMULATION LOLOLOL",
+      "image": "images/glitch2.png",
+      "behavior": {
+        "swipe_result": "system_crash",
+        "crash_duration_seconds": 2.5,
+        "crash_effect": "screen_jitter + color_invert + scrambled_UI",
+        "on_complete": "reboot_to_home_screen"
+      }
+    }
+  ],
+  "game_rules": {
+    "normal_phase": "Cards 1–3. Any swipe (left/right) = CORRECT. Score increments. Smooth card fly-off animation.",
+    "glitch_phase": "Card 4. Any swipe triggers full-phone SystemCrash overlay. 2.5s animation → close app → return to Kūmara OS home screen.",
+    "total_cards_in_full_deck": 3,
+    "cards_before_glitch": 3,
+    "last_revision_from_figma": "glitch_1 (CCTV Rob Bot) stripped. Flow: 3 normals → immediate glitch_2 crash."
+  }
+}

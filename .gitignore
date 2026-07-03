@@ -1,0 +1,9 @@
+# Kūmara OS v8.0 — Git ignore
+node_modules/
+__pycache__/
+*.pyc
+.vscode/
+.hermes/
+*.log
+.DS_Store
+Thumbs.db

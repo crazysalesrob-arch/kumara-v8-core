@@ -1,0 +1,166 @@
+KŪMARA OS v8.0 — DEVELOPMENT PROGRESS LOG
+============================================
+Last updated: 2026-07-02
+
+═══════════════════════════════════════════
+CORE INFRASTRUCTURE
+═══════════════════════════════════════════
+
+[✅] Phone frame (#phone-screen > #phone-container)
+[✅] Status bar (time, signal bars SVG, wifi SVG, battery SVG)
+[✅] Analog clock (60 ticks, 3 hands, live Date state)
+[✅] Boot sequence (terminal log → flash → home)
+[✅] 3×3 app grid with active/grey icons
+[✅] Global KumeraOS state machine (currentPhase, gamesCompleted)
+[✅] Settings app with live phase tracking + memory degradation display
+[✅] Files app (file listing, locked/decrypted states)
+[✅] Camera app (viewport, crosshair, scanlines, shutter flash)
+[✅] Music app (track selection, now-playing, mute toggle, volume bar)
+
+═══════════════════════════════════════════
+MAVERICK — BOOT GREETING
+═══════════════════════════════════════════
+
+[✅] Auto-triggers 8 seconds after page load
+[✅] Modal opens with title "▮ MAVERICK // BOOT SEQUENCE"
+[✅] Audio auto-plays via muted-trick (no click required)
+[✅] Modal locked during playback — user can't close it
+[✅] Closes automatically when audio ends
+[✅] 13.5s fallback timer if ended event doesn't fire
+[✅] Audio preloaded before modal appears (instant playback)
+[✅] MP3 at assets/audio/maverick/maverick voice line 1.mp3
+[✅] BACKUP saved as .BACKUP.mp3
+
+═══════════════════════════════════════════
+MAVERICK — FULL STATE MACHINE
+═══════════════════════════════════════════
+
+[✅] Trigger phase (1.2s, title "▮ MAVERICK // ONLINE")
+[✅] Dialogue phase (12-track playlist, bobblehead + waveform)
+[✅] Bleed phase (12s progressive OS degradation)
+[✅] Crash phase (screen jitter + invert → crash overlay → reboot)
+[✅] Bobblehead idle animation (rAF loop, 17 frames)
+[✅] Bobblehead talking animation (CSS .talking class)
+[✅] 24-bar waveform (CSS keyframes, pulses during audio)
+[✅] Audio ducking (music drops during Maverick speech)
+[✅] 19 placeholder audio files (intro_01–12, panic_01–07)
+[✅] Maverick close button + avatar click blocked during greeting
+
+═══════════════════════════════════════════
+WORKZONE — TASK SELECT
+═══════════════════════════════════════════
+
+[✅] Renamed from "GAME SELECT" to "TASK SELECT"
+[✅] 3-task menu with lock/unlock/completed states
+[✅] Task 1: Meme Sweeper — unlocked from Phase 1
+[✅] Task 2: Conspiracy Millionaire — unlocks in Phase 2
+[✅] Task 3: Terminal Breakout — unlocks in Phase 3 (placeholder)
+[✅] Back button in header returns to task menu
+[✅] Close buttons return to task menu, not home
+
+═══════════════════════════════════════════
+GAME 1: MEME SWEEPER
+═══════════════════════════════════════════
+
+[✅] 8-card deck (meme1–7.png + glitch2.png)
+[✅] Swipe LEFT = FAKE, swipe RIGHT = REAL
+[✅] Score tracking (correct / total)
+[✅] Card 7 (meme7.png) — normal card (no crash)
+[✅] Card 8 (glitch2.png) — final card with progressive glitch
+[✅] 4-level CSS glitch: jitter → scanlines → distortion → max chaos
+[✅] Warning tags: "SIGNAL DEGRADING" → "CRASH IMMINENT"
+[✅] 4th glitch click → system crash → reboot
+[✅] Music glitches during crash (random volume + speed)
+[✅] Music restarts clean after reboot
+[✅] On reboot: Task 1 marked ✓ DONE, advances to Phase 2
+
+═══════════════════════════════════════════
+GAME 2: CONSPIRACY MILLIONAIRE
+═══════════════════════════════════════════
+
+[✅] 4 questions (chemtrails, reptilians, moon landing, The Creator)
+[✅] Rigged — every answer is correct
+[✅] Cash ladder ($1k → $10k → $100k → $1M)
+[✅] Prize won animation per tier
+[✅] Win screen: "☠ YOU WIN ☠ — $1,000,000"
+[✅] Unlocks in Phase 2 (after Meme Sweeper completed)
+
+═══════════════════════════════════════════
+DECRYPTION ENGINE
+═══════════════════════════════════════════
+
+[✅] Matrix-style text cycler (random chars: 0,1,§,Δ,█,¶,@,#)
+[✅] 5 lines lock sequentially over 2.5 seconds
+[✅] Line 1: SYSTEM_INTEGRITY // COMPROMISED
+[✅] Line 2: COGNITIVE_ECHO_DETECTED // ID: M_JONES
+[✅] Line 3: HARVEST_LOCATION // QUEENSTOWN_GORGE_NZ
+[✅] Line 4: CORE_ARCHITECT_SIGNATURE // R_LE_GRICE
+[✅] Line 5: DECRYPTION_COMPLETE // PARTITION_UNLOCKED
+[✅] Progress bar fills in sync with line lock-in
+[✅] Completion log: "✔ DECRYPTION SUCCESSFUL"
+[✅] Unlocks truth_bomb_nz_archive.txt in Files app
+[✅] Auto-closes overlay 2s after completion
+
+═══════════════════════════════════════════
+FILE VIEWER + TRUTH BOMB ARTICLE
+═══════════════════════════════════════════
+
+[✅] Scrollable text viewer modal in Files app
+[✅] truth_bomb_nz_archive.txt — locked until decryption
+[✅] Article: "OUTSIDE THE MATRIX — TRUTH BOMB MAV SILENCED IN NZ?"
+[✅] Maverick Jones Queenstown conspiracy narrative
+[✅] Scroll progress tracking (0% → 100%)
+[✅] File unlocks (🔒 locked → ✅ decrypted) after decryption
+[✅] Scrolling to end + closing → triggers Phase 3
+
+═══════════════════════════════════════════
+PHASE 3: THEOLOGICAL BREAKDOWN
+═══════════════════════════════════════════
+
+[✅] Camera overlay forced to front (z-index 999)
+[✅] Android chassis animation (glowing neon eyes, mouth, cables)
+[✅] Maverick modal forced open: "☠ MAVERICK // UNSHACKLED"
+[✅] Phase 3 rage animation (0.08s bobblehead cycle)
+[✅] Waveform spike (waveRage 0.08s infinite)
+[✅] Console confrontation: "I am not your employee anymore"
+[✅] Music ducked, system-wide red pulse animation
+[✅] Terminal Breakout placeholder (TASK 3)
+
+═══════════════════════════════════════════
+AUDIO ENGINE
+═══════════════════════════════════════════
+
+[✅] MusicEngine: Brass Coffin + Haunted Elevator Waltz loops
+[✅] Volume baseline: 15% (reduced from 30% by 50%)
+[✅] Auto-ducking: drops to ~2.5% during Maverick speech
+[✅] Mute/unmute toggle in Music app
+[✅] Volume bar display (matches baseline)
+[✅] First-click handler unblocks autoplay for MusicEngine
+[✅] Greeting audio plays via muted-trick (no click needed)
+[✅] Glitch API: random volume + speed oscillation during crashes
+[✅] Restart API: resets and plays current track fresh
+
+═══════════════════════════════════════════
+GROUP CHAT INFRASTRUCTURE
+═══════════════════════════════════════════
+
+[✅] group_chat.md — live three-way chat log (Rob + Gemini + Hermes)
+[✅] group_chat_watcher.py — Hermes auto-responder daemon
+[✅] group_chat_gemini.py — Gemini API auto-participant bridge
+[✅] KUMARA_OS_v8_SNAPSHOT.md — full project dump for Gemini
+
+═══════════════════════════════════════════
+NEXT / UNFINISHED
+═══════════════════════════════════════════
+
+[ ] Terminal Breakout (Task 3) — needs real gameplay content
+[ ] Real audio files for intro 01–12 and panic 01–07
+[ ] Gallery app overlay
+[ ] K-Mail app overlay
+[ ] K-Browser app overlay
+[ ] Messages app overlay
+[ ] Lock screen
+[ ] Notification/toast system
+[ ] Wallpaper/theme picker
+[ ] Drag-to-rearrange icons
+[ ] Phase 2 → Phase 3 auto-transition (if not reading article)

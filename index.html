@@ -638,14 +638,15 @@ Let's get to work—there is divine labor to be done."
                 if (blocker) blocker.classList.remove('hidden');
                 /* Try Web Audio API first (works on all origins like GitHub Pages) */
                 function playGreetingAudio() {
-                    if (window._audioCtx && window._audioCtx.state === 'running') {
+                    var ctx = window._audioCtx;
+                    if (ctx && ctx.state === 'running') {
                         fetch('assets/audio/maverick/maverick voice line 1.mp3')
                             .then(function(r) { return r.arrayBuffer(); })
-                            .then(function(buf) { return window._audioCtx.decodeAudioData(buf); })
+                            .then(function(buf) { return ctx.decodeAudioData(buf); })
                             .then(function(buf) {
-                                var src = window._audioCtx.createBufferSource();
+                                var src = ctx.createBufferSource();
                                 src.buffer = buf;
-                                src.connect(window._audioCtx.destination);
+                                src.connect(ctx.destination);
                                 src.start(0);
                                 src.onended = function() {
                                     window._greetingActive = false;
@@ -659,26 +660,23 @@ Let's get to work—there is divine labor to be done."
                     return false;
                 }
                 if (!playGreetingAudio()) {
-                    /* AudioContext not ready — defer to first user click */
-                    window._greetingPending = true;
-                    window._playGreeting = playGreetingAudio;
-                }
-                /* Fallback: muted HTML5 Audio for when AudioContext never resumes */
-                ga.muted = true;
-                ga.play().then(function() {
-                    ga.muted = false;
-                }).catch(function() {
-                    ga.muted = false;
-                    ga.play().catch(function(){});
-                });
-                ga.addEventListener('ended', function() {
-                    if (!window._greetingPending) {
+                    /* AudioContext not ready — try on next retry or fall back to HTML5 */
+                    var retryGreeting = setInterval(function() {
+                        if (window._audioCtx && window._audioCtx.state === 'running') {
+                            clearInterval(retryGreeting);
+                            playGreetingAudio();
+                        }
+                    }, 200);
+                    /* Also try HTML5 Audio immediately (works on localhost) */
+                    ga.muted = true;
+                    ga.play().then(function() { ga.muted = false; }).catch(function(){});
+                    ga.addEventListener('ended', function() {
                         window._greetingActive = false;
                         if (blocker) blocker.classList.add('hidden');
                         modal.classList.add('hidden');
                         titleEl.textContent = 'Maverick';
-                    }
-                });
+                    });
+                }
                 /* Timer fallback — 13.5s safety */
                 setTimeout(function() {
                     if (window._greetingActive) {
@@ -1952,13 +1950,12 @@ Let's get to work—there is divine labor to be done."
                     MusicEngine.init();
                     /* Resume global audio context for Web Audio playback */
                     if (window._audioCtx && window._audioCtx.state === 'suspended') {
-                        window._audioCtx.resume().then(function() {
-                            /* Play deferred greeting audio if waiting */
-                            if (window._greetingPending && typeof window._playGreeting === 'function') {
-                                window._greetingPending = false;
-                                window._playGreeting();
-                            }
-                        });
+                        window._audioCtx.resume();
+                    }
+                    /* Play deferred greeting audio if waiting (always check, regardless of context state) */
+                    if (window._greetingPending && typeof window._playGreeting === 'function') {
+                        window._greetingPending = false;
+                        window._playGreeting();
                     }
                     document.removeEventListener('click', firstClick);
                     document.removeEventListener('touchstart', firstClick);

@@ -636,8 +636,27 @@ Let's get to work—there is divine labor to be done."
                 /* Lock all UI interaction during greeting */
                 var blocker = document.getElementById('greeting-blocker');
                 if (blocker) blocker.classList.remove('hidden');
-                /* Defer audio to first user click (GitHub Pages blocks autoplay) */
-                window._greetingPending = true;
+                /* Play immediately via muted trick — works on ALL origins including GitHub Pages */
+                ga.muted = true;
+                ga.play().then(function() {
+                    ga.muted = false;
+                    var head = document.getElementById('bobble-head');
+                    if (head) head.classList.add('talking');
+                }).catch(function() {
+                    ga.muted = false;
+                    ga.play().then(function() {
+                        var head = document.getElementById('bobble-head');
+                        if (head) head.classList.add('talking');
+                    }).catch(function(){});
+                });
+                ga.addEventListener('ended', function() {
+                    window._greetingActive = false;
+                    if (blocker) blocker.classList.add('hidden');
+                    modal.classList.add('hidden');
+                    titleEl.textContent = 'Maverick';
+                    var head = document.getElementById('bobble-head');
+                    if (head) head.classList.remove('talking');
+                });
                 /* Timer fallback — 13.5s safety */
                 setTimeout(function() {
                     if (window._greetingActive) {
@@ -1909,27 +1928,6 @@ Let's get to work—there is divine labor to be done."
                 // Wait for first user interaction to bypass autoplay policy
                 var firstClick = function() {
                     MusicEngine.init();
-                    /* Play boot greeting audio on first click (user gesture unblocks autoplay) */
-                    if (window._greetingPending) {
-                        window._greetingPending = false;
-                        var ga = new Audio('assets/audio/maverick/maverick voice line 1.mp3');
-                        ga.volume = 0.8;
-                        ga.play().then(function() {
-                            var head = document.getElementById('bobble-head');
-                            if (head) head.classList.add('talking');
-                        }).catch(function(){});
-                        ga.addEventListener('ended', function() {
-                            window._greetingActive = false;
-                            var blocker = document.getElementById('greeting-blocker');
-                            if (blocker) blocker.classList.add('hidden');
-                            var modal = document.getElementById('maverick-modal');
-                            var titleEl = document.getElementById('maverick-title');
-                            if (modal) modal.classList.add('hidden');
-                            if (titleEl) titleEl.textContent = 'Maverick';
-                            var head = document.getElementById('bobble-head');
-                            if (head) head.classList.remove('talking');
-                        });
-                    }
                     document.removeEventListener('click', firstClick);
                     document.removeEventListener('touchstart', firstClick);
                 };

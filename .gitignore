@@ -6,8 +6,16 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .hermes/
-group_chat*
-chat_server.py
-gemini_bridge.py
-build_figma_step.py
-.gemini_secret
+.*.lock
+*.cursor
+*.gemini_secret
+*group_chat*
+*chat_server*
+*gemini_bridge*
+*build_figma_step*
+love_ritual_*
+KUMARA_OS_PROGRESS*
+KUMARA_OS_v8_SNAPSHOT*
+mav line22*
+newsarticle_compressed*
+:Zone.Identifier

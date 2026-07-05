@@ -1381,7 +1381,7 @@ Let's get to work—there is divine labor to be done."
                 console.log('PHASE2: advancePhase(2) fired, attempting audio play');
                 var audioEl = document.getElementById('phase2-audio');
                 if (audioEl) {
-                    audioEl.src = 'assets/audio/maverick/mav_line2.mp3';
+                    audioEl.src = window.location.origin + '/assets/audio/maverick/mav_line2.mp3';
                     audioEl.volume = 0.8;
                     audioEl.play()
                         .then(function() {

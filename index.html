@@ -626,6 +626,7 @@ Let's get to work—there is divine labor to be done."
             ga.volume = 0.8;
             ga.preload = 'auto';
             ga.load();
+            window._ga = ga;
 
             var modal = document.getElementById('maverick-modal');
             var titleEl = document.getElementById('maverick-title');
@@ -636,18 +637,15 @@ Let's get to work—there is divine labor to be done."
                 /* Lock all UI interaction during greeting */
                 var blocker = document.getElementById('greeting-blocker');
                 if (blocker) blocker.classList.remove('hidden');
-                /* Play immediately via muted trick — works on ALL origins including GitHub Pages */
+                /* Try muted autoplay (works on localhost, may fail on HTTPS like GitHub Pages) */
                 ga.muted = true;
                 ga.play().then(function() {
                     ga.muted = false;
                     var head = document.getElementById('bobble-head');
                     if (head) head.classList.add('talking');
                 }).catch(function() {
-                    ga.muted = false;
-                    ga.play().then(function() {
-                        var head = document.getElementById('bobble-head');
-                        if (head) head.classList.add('talking');
-                    }).catch(function(){});
+                    /* Blocked by autoplay policy — defer to first click */
+                    window._greetingPending = true;
                 });
                 ga.addEventListener('ended', function() {
                     window._greetingActive = false;
@@ -1927,7 +1925,23 @@ Let's get to work—there is divine labor to be done."
             if (MusicEngine && MusicEngine.init) {
                 // Wait for first user interaction to bypass autoplay policy
                 var firstClick = function() {
-                    MusicEngine.init();
+                    if (window._greetingPending) {
+                        window._greetingPending = false;
+                        /* Play greeting first — music starts when greeting ends */
+                        window._ga.muted = false;
+                        window._ga.currentTime = 0;
+                        window._ga.play().then(function() {
+                            var head = document.getElementById('bobble-head');
+                            if (head) head.classList.add('talking');
+                        }).catch(function(){});
+                        /* Hook music start into greeting's ended event */
+                        var origEnded = window._ga.onended || window._ga._origEnded;
+                        window._ga.addEventListener('ended', function() {
+                            MusicEngine.init();
+                        });
+                    } else {
+                        MusicEngine.init();
+                    }
                     document.removeEventListener('click', firstClick);
                     document.removeEventListener('touchstart', firstClick);
                 };
